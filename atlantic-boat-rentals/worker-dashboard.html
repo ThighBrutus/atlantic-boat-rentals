@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Booking Desk — Atlantic Boat Rentals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#102e3a;--ink2:#174554;--cream:#f4f0e8;--sand:#ded2bd;--coral:#e3674e;--lime:#d7df70;--line:rgba(16,46,58,.18)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif;font-size:16px}
+  header.top{height:80px;display:flex;align-items:center;gap:18px;padding:0 clamp(20px,5vw,60px);border-bottom:1px solid var(--line);background:var(--cream)}
+  .brand{display:flex;align-items:center;gap:9px;text-transform:uppercase;color:var(--ink);font-weight:700;line-height:.88;letter-spacing:.04em;font-size:14px}
+  .brand em{font-family:"Playfair Display",serif;font-size:14px;text-transform:none;letter-spacing:0;font-weight:500}
+  .brand-mark{font-family:"Playfair Display",serif;font-style:italic;font-size:32px;line-height:1}
+  header.top h1{font-family:"Playfair Display",serif;font-weight:500;font-size:19px;margin:0 0 0 auto}
+
+  /* Gate */
+  #gate{max-width:380px;margin:14vh auto;padding:0 20px;text-align:center}
+  #gate h2{font-family:"Playfair Display",serif;font-size:30px;margin:0 0 10px}
+  #gate p{color:#4d6169;font-size:14px;margin:0 0 22px}
+  #gate input{width:100%;padding:14px 16px;border:1px solid var(--line);background:#fff;font-size:15px;margin-bottom:12px}
+  #gate button{width:100%;border:0;background:var(--ink);color:#fff;font-weight:700;font-size:14px;padding:15px;cursor:pointer}
+  #gate button:hover{background:var(--ink2)}
+  #gate .error{color:var(--coral);font-size:13px;margin-top:10px;display:none}
+
+  /* Dashboard */
+  #dash{display:none;max-width:1040px;margin:0 auto;padding:34px 20px 80px}
+  .dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+  .dash-head h2{font-family:"Playfair Display",serif;font-weight:500;font-size:34px;margin:0}
+  .dash-sub{color:#4d6169;font-size:13px;margin-top:4px}
+  .tools{display:flex;gap:10px;align-items:center}
+  .tools button{border:1px solid var(--ink);background:#fff;color:var(--ink);font:500 12px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;cursor:pointer}
+  .tools button.primary{background:var(--ink);color:#fff}
+  .tools button:hover{opacity:.85}
+
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px}
+  .tabs button{border:0;background:none;padding:10px 4px;margin-right:22px;font:600 13px "DM Sans",sans-serif;color:#7c8b8f;cursor:pointer;border-bottom:2px solid transparent}
+  .tabs button.active{color:var(--ink);border-color:var(--coral)}
+  .tabs button .count{color:inherit;opacity:.65;font-weight:500}
+
+  .empty{color:#7c8b8f;font-size:14px;padding:50px 0;text-align:center}
+
+  .cards{display:grid;gap:14px}
+  .card{background:#fff;border:1px solid var(--line);padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+  .card.finalized{opacity:.6}
+  .card-main{display:grid;gap:6px}
+  .card-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .card-name{font-weight:700;font-size:16px}
+  .status-pill{font:500 10px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px}
+  .status-pill.pending{background:var(--lime);color:var(--ink)}
+  .status-pill.finalized{background:var(--ink);color:#fff}
+  .card-meta{color:#4d6169;font-size:13px;display:flex;gap:14px;flex-wrap:wrap}
+  .card-meta b{color:var(--ink)}
+  .card-notes{font-size:13px;color:#4d6169;font-style:italic}
+  .card-submitted{font:400 11px "DM Mono",monospace;color:#9aa6a8;text-transform:uppercase;letter-spacing:.04em}
+  .card-actions{display:flex;flex-direction:column;gap:8px;align-items:stretch;width:150px;flex-shrink:0}
+  .card-actions button{border:0;padding:11px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .btn-finalize{background:var(--coral);color:#fff}
+  .btn-finalize:hover{background:#c9573f}
+  .btn-undo{background:#fff;border:1px solid var(--line) !important;color:var(--ink)}
+  .btn-undo:hover{background:var(--sand)}
+  .call-link{background:#fff;border:1px solid var(--line) !important;color:var(--ink);text-decoration:none;text-align:center;display:block}
+
+  @media(max-width:620px){
+    .card{grid-template-columns:1fr}
+    .card-actions{flex-direction:row;width:100%}
+    .card-actions button, .call-link{flex:1}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><span class="brand-mark">A</span><span>ATLANTIC<br /><em>Boat Rentals</em></span></div>
+  <h1>Booking Desk</h1>
+</header>
+
+<div id="gate">
+  <h2>Crew sign-in</h2>
+  <p>Enter the booking desk password to view and finalize trip requests.</p>
+  <input type="password" id="token-input" placeholder="Password" autocomplete="off" />
+  <button id="unlock-btn">Unlock</button>
+  <p class="error" id="gate-error">That password didn't work — try again.</p>
+</div>
+
+<div id="dash">
+  <div class="dash-head">
+    <div>
+      <h2>Trip requests</h2>
+      <div class="dash-sub" id="last-updated">—</div>
+    </div>
+    <div class="tools">
+      <button id="refresh-btn">↻ Refresh</button>
+      <button id="lock-btn">Lock</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="active" data-tab="pending">Pending <span class="count" id="count-pending"></span></button>
+    <button data-tab="finalized">Finalized <span class="count" id="count-finalized"></span></button>
+    <button data-tab="all">All <span class="count" id="count-all"></span></button>
+  </div>
+
+  <div class="cards" id="cards"></div>
+  <div class="empty" id="empty-state" style="display:none">No bookings here yet.</div>
+</div>
+
+<script>
+// Paste the same Apps Script Web App URL you used in script.js.
+const BOOKING_API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+const $ = (s) => document.querySelector(s);
+const gate = $('#gate');
+const dash = $('#dash');
+const cardsEl = $('#cards');
+const emptyState = $('#empty-state');
+let TOKEN = sessionStorage.getItem('atlantic-worker-token') || '';
+let bookings = [];
+let activeTab = 'pending';
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+function fmtDateTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+function phoneDigits(p) { return (p || '').replace(/[^\d+]/g, ''); }
+
+async function loadBookings() {
+  $('#last-updated').textContent = 'Loading…';
+  try {
+    const res = await fetch(`${BOOKING_API_URL}?token=${encodeURIComponent(TOKEN)}`);
+    const result = await res.json();
+    if (!result.ok) throw new Error(result.error || 'Failed to load');
+    bookings = result.bookings || [];
+    $('#last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    render();
+  } catch (err) {
+    $('#last-updated').textContent = 'Could not load bookings — check the connection and try Refresh.';
+  }
+}
+
+function render() {
+  const pending = bookings.filter((b) => b.Status !== 'Finalized');
+  const finalized = bookings.filter((b) => b.Status === 'Finalized');
+  $('#count-pending').textContent = pending.length || '';
+  $('#count-finalized').textContent = finalized.length || '';
+  $('#count-all').textContent = bookings.length || '';
+
+  const list = activeTab === 'pending' ? pending : activeTab === 'finalized' ? finalized : bookings;
+  cardsEl.innerHTML = '';
+  emptyState.style.display = list.length ? 'none' : 'block';
+
+  list.forEach((b) => {
+    const isFinal = b.Status === 'Finalized';
+    const card = document.createElement('div');
+    card.className = 'card' + (isFinal ? ' finalized' : '');
+    card.innerHTML = `
+      <div class="card-main">
+        <div class="card-top">
+          <span class="card-name">${escapeHtml(b.Name || 'Unnamed')}</span>
+          <span class="status-pill ${isFinal ? 'finalized' : 'pending'}">${isFinal ? 'Finalized' : 'Pending'}</span>
+        </div>
+        <div class="card-meta">
+          <span><b>${fmtDate(b['Date Requested'])}</b></span>
+          <span>${escapeHtml(b.Experience || '—')}</span>
+          <span>${escapeHtml(b.Guests || '—')}</span>
+          <span>${escapeHtml(b.Phone || '—')}</span>
+        </div>
+        ${b.Notes ? `<div class="card-notes">“${escapeHtml(b.Notes)}”</div>` : ''}
+        <div class="card-submitted">Requested ${fmtDateTime(b.Submitted)}</div>
+      </div>
+      <div class="card-actions">
+        ${isFinal
+          ? `<button class="btn-undo" data-id="${b.ID}" data-action="pending">Mark pending</button>`
+          : `<button class="btn-finalize" data-id="${b.ID}" data-action="finalize">Finalize</button>`
+        }
+        <a class="call-link" href="tel:${phoneDigits(b.Phone)}">Call</a>
+      </div>
+    `;
+    cardsEl.append(card);
+  });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+cardsEl.addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-id]');
+  if (!btn) return;
+  const id = btn.dataset.id;
+  const action = btn.dataset.action;
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    const params = new URLSearchParams({ action: 'finalize', id, status: action, token: TOKEN });
+    const res = await fetch(`${BOOKING_API_URL}?${params.toString()}`, { method: 'POST' });
+    const result = await res.json();
+    if (result.ok) {
+      const b = bookings.find((x) => x.ID === id);
+      if (b) b.Status = action === 'pending' ? 'Pending' : 'Finalized';
+      render();
+    } else {
+      alert('Could not update that booking — try Refresh and try again.');
+    }
+  } catch (err) {
+    alert('Could not reach the booking system — check your connection.');
+  }
+});
+
+document.querySelectorAll('.tabs button').forEach((tab) => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach((t) => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeTab = tab.dataset.tab;
+    render();
+  });
+});
+
+$('#refresh-btn').addEventListener('click', loadBookings);
+$('#lock-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('atlantic-worker-token');
+  TOKEN = '';
+  dash.style.display = 'none';
+  gate.style.display = 'block';
+});
+
+async function tryUnlock(token) {
+  TOKEN = token;
+  const res = await fetch(`${BOOKING_API_URL}?token=${encodeURIComponent(TOKEN)}`);
+  const result = await res.json();
+  if (result.ok) {
+    sessionStorage.setItem('atlantic-worker-token', TOKEN);
+    bookings = result.bookings || [];
+    gate.style.display = 'none';
+    dash.style.display = 'block';
+    $('#last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    render();
+  } else {
+    $('#gate-error').style.display = 'block';
+  }
+}
+
+$('#unlock-btn').addEventListener('click', () => {
+  const val = $('#token-input').value.trim();
+  if (val) tryUnlock(val);
+});
+$('#token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#unlock-btn').click(); });
+
+// Auto sign-in if we already unlocked this session
+if (TOKEN) tryUnlock(TOKEN);
+</script>
+</body>
+</html>
