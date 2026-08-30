@@ -9,7 +9,7 @@ let editMode = false;
 // ── Booking backend ──────────────────────────────────────────────────
 // Paste the Web App URL you get after deploying booking-backend.gs here.
 // See SETUP-BOOKING-SYSTEM.md for the full walkthrough.
-const BOOKING_API_URL = 'https://thighbrutus.github.io/atlantic-boat-rentals/';
+const BOOKING_API_URL = 'https://script.google.com/macros/s/AKfycbxFbEQ4h9Tn8J6Fz2hB4HPsXtJUzNBODj8UrWcn8uRzNYgFMENUA5U0TytaKMvMZRXx/exec';
 // ──────────────────────────────────────────────────────────────────────
 
 $('#year').textContent = new Date().getFullYear();
