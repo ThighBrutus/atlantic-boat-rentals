@@ -133,7 +133,7 @@ function fmtDateTime(iso) {
   if (isNaN(d)) return iso;
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
-function phoneDigits(p) { return (p || '').replace(/[^\d+]/g, ''); }
+function phoneDigits(p) { return String(p || '').replace(/[^\d+]/g, ''); }
 
 async function loadBookings() {
   $('#last-updated').textContent = 'Loading…';
