@@ -110,7 +110,7 @@
 
 <script>
 // Paste the same Apps Script Web App URL you used in script.js.
-const BOOKING_API_URL = 'https://thighbrutus.github.io/atlantic-boat-rentals/';
+const BOOKING_API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 const $ = (s) => document.querySelector(s);
 const gate = $('#gate');
@@ -237,17 +237,34 @@ $('#lock-btn').addEventListener('click', () => {
 
 async function tryUnlock(token) {
   TOKEN = token;
-  const res = await fetch(`${BOOKING_API_URL}?token=${encodeURIComponent(TOKEN)}`);
-  const result = await res.json();
-  if (result.ok) {
-    sessionStorage.setItem('atlantic-worker-token', TOKEN);
-    bookings = result.bookings || [];
-    gate.style.display = 'none';
-    dash.style.display = 'block';
-    $('#last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    render();
-  } else {
-    $('#gate-error').style.display = 'block';
+  const errorEl = $('#gate-error');
+  const unlockBtn = $('#unlock-btn');
+  unlockBtn.disabled = true;
+  unlockBtn.textContent = 'Checking…';
+  errorEl.style.display = 'none';
+  try {
+    if (!BOOKING_API_URL || BOOKING_API_URL.includes('PASTE_YOUR_APPS_SCRIPT')) {
+      throw new Error('The Web App URL hasn\'t been pasted into this file yet (still shows the placeholder text).');
+    }
+    const res = await fetch(`${BOOKING_API_URL}?token=${encodeURIComponent(TOKEN)}`);
+    const result = await res.json();
+    if (result.ok) {
+      sessionStorage.setItem('atlantic-worker-token', TOKEN);
+      bookings = result.bookings || [];
+      gate.style.display = 'none';
+      dash.style.display = 'block';
+      $('#last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      render();
+    } else {
+      errorEl.textContent = "That password didn't work — try again.";
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    errorEl.textContent = 'Could not reach the booking system: ' + err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    unlockBtn.disabled = false;
+    unlockBtn.textContent = 'Unlock';
   }
 }
 
